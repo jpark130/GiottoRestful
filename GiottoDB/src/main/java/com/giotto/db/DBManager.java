@@ -3,24 +3,15 @@ package com.giotto.db;
 import java.net.UnknownHostException;
 
 import com.giotto.things.*;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
-import com.mongodb.WriteResult;
-
+import com.mongodb.*;
+import com.mongodb.client.MongoDatabase;
 public class DBManager {
 
 	//Overloaded method for inserting people
 	public static boolean insert(Person thing) throws UnknownHostException{
-		MongoClient client = new MongoClient();
-		DB db = client.getDB("Giotto");
-		DBCollection people = db.getCollection("People");
-		BasicDBObject document = new BasicDBObject();
-		document.append("name", thing.getName());
-		document.append("location", thing.getLocation());
-		people.insert(document);
+		MongoClient m = new MongoClient();
+		MongoDatabase db = m.getDatabase("Giotto");
+		System.out.println(db.getName());
 		return true;
 		
 	}

@@ -10,7 +10,6 @@ public class App
 {
     public static void main( String[] args ) throws Exception
     {		
-    	//test
 		ResourceConfig config = new ResourceConfig();
 		config.packages("com.giotto");
 		ServletHolder servlet = new ServletHolder(new ServletContainer(config));

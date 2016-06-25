@@ -16,9 +16,7 @@ public class Resource {
   @GET
   @Path("hello")
   @Produces(MediaType.TEXT_PLAIN)
-  public String helloWorld() throws UnknownHostException {
-	DBManager.insert((Person)null);
-	return null;
-	  
+  public long helloWorld() throws UnknownHostException {
+	return DBManager.count("People");	  
   }
 }

@@ -9,10 +9,9 @@ public class DBManager {
 
 	//Overloaded method for inserting people
 	public static boolean insert(Person thing) throws UnknownHostException{
-//		MongoClient m = new MongoClient("52.0.136.240",27017);
-		MongoClient m = new MongoClient("0.0.0.0",27017);
+		MongoClient m = new MongoClient("52.0.136.240",27017);
+//		MongoClient m = new MongoClient("0.0.0.0",27017);
 		MongoDatabase db = m.getDatabase("Giotto");
-		System.out.println(db.getCollection("People").count());
 		m.close();
 		return true;
 	}
@@ -31,14 +30,16 @@ public class DBManager {
 
 	}
 	
-	public static long count(String name){
-		MongoClient m = new MongoClient("0.0.0.0",27017);
+	//Get Number of people at a certain location
+	public static long count(String name, Location location){
+		MongoClient m = new MongoClient("52.0.136.240",27017);
+//		MongoClient m = new MongoClient("0.0.0.0",27017);
 		MongoDatabase db = m.getDatabase("Giotto");
 		long count = db.getCollection(name).count();
 		m.close();
 		return count;
 	}
-	
+	 
 	public static void update(String name, String newLocation) throws UnknownHostException{
 		MongoClient client = new MongoClient();
 		DB db = client.getDB("Giotto");

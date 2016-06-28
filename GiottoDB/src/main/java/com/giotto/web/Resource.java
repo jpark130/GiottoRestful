@@ -8,7 +8,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.giotto.db.DBManager;
-import com.giotto.things.Location;
 import com.giotto.things.Person;
 
 @Path("home")
@@ -18,6 +17,6 @@ public class Resource {
   @Path("hello")
   @Produces(MediaType.TEXT_PLAIN)
   public long helloWorld() throws UnknownHostException {
-	return DBManager.count("People", new Location());	  
+	return DBManager.count("People");	  
   }
 }

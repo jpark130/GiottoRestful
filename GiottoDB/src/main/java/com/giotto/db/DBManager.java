@@ -9,8 +9,8 @@ public class DBManager {
 
 	//Overloaded method for inserting people
 	public static boolean insert(Person thing) throws UnknownHostException{
-//		MongoClient m = new MongoClient("52.0.136.240",27017);
-		MongoClient m = new MongoClient("0.0.0.0",27017);
+		MongoClient m = new MongoClient("52.0.136.240",27017);
+//		MongoClient m = new MongoClient("0.0.0.0",27017);
 		MongoDatabase db = m.getDatabase("Giotto");
 		System.out.println(db.getCollection("People").count());
 		m.close();
@@ -18,6 +18,8 @@ public class DBManager {
 	}
 	
 	//Overloaded method for inserting location 
+	//to insert a location make json -> location 
+	//then add it to the database
 	public static boolean insert(Location thing) throws UnknownHostException{
 		MongoClient client = new MongoClient();
 		DB db = client.getDB("Giotto");
@@ -31,8 +33,15 @@ public class DBManager {
 
 	}
 	
+	/** 
+	 * 
+	 * Counts the number of elements in the given database
+	 * 
+	 * @param the name of the database
+	 * */
 	public static long count(String name){
-		MongoClient m = new MongoClient("0.0.0.0",27017);
+		MongoClient m = new MongoClient("52.0.136.240",27017);
+//		MongoClient m = new MongoClient("0.0.0.0",27017);
 		MongoDatabase db = m.getDatabase("Giotto");
 		long count = db.getCollection(name).count();
 		m.close();

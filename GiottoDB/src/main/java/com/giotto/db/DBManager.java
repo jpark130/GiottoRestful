@@ -12,7 +12,6 @@ public class DBManager {
 		MongoClient m = new MongoClient("52.0.136.240",27017);
 //		MongoClient m = new MongoClient("0.0.0.0",27017);
 		MongoDatabase db = m.getDatabase("Giotto");
-		System.out.println(db.getCollection("People").count());
 		m.close();
 		return true;
 	}
@@ -33,6 +32,7 @@ public class DBManager {
 
 	}
 	
+<<<<<<< HEAD
 	/** 
 	 * 
 	 * Counts the number of elements in the given database
@@ -40,6 +40,10 @@ public class DBManager {
 	 * @param the name of the database
 	 * */
 	public static long count(String name){
+=======
+	//Get Number of people at a certain location
+	public static long count(String name, Location location){
+>>>>>>> 6f9c09f9c402cbaffde98bb0ed6a1862d384abaf
 		MongoClient m = new MongoClient("52.0.136.240",27017);
 //		MongoClient m = new MongoClient("0.0.0.0",27017);
 		MongoDatabase db = m.getDatabase("Giotto");
@@ -47,7 +51,7 @@ public class DBManager {
 		m.close();
 		return count;
 	}
-	
+	 
 	public static void update(String name, String newLocation) throws UnknownHostException{
 		MongoClient client = new MongoClient();
 		DB db = client.getDB("Giotto");

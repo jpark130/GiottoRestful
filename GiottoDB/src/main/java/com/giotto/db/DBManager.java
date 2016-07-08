@@ -7,10 +7,13 @@ import com.mongodb.*;
 import com.mongodb.client.MongoDatabase;
 public class DBManager {
 
+	private final static String DB_ADDRESS = "52.0.136.240";
+//	private final static String DB_ADDRESS = "0.0.0.0";
+	private final static int PORT = 27017;
+	
 	//Overloaded method for inserting people
 	public static boolean insert(Person thing) throws UnknownHostException{
-		MongoClient m = new MongoClient("52.0.136.240",27017);
-//		MongoClient m = new MongoClient("0.0.0.0",27017);
+		MongoClient m = new MongoClient(DB_ADDRESS,PORT); //AWS
 		MongoDatabase db = m.getDatabase("Giotto");
 		System.out.println(db.getCollection("People").count());
 		m.close();
@@ -21,16 +24,11 @@ public class DBManager {
 	//to insert a location make json -> location 
 	//then add it to the database
 	public static boolean insert(Location thing) throws UnknownHostException{
-		MongoClient client = new MongoClient();
-		DB db = client.getDB("Giotto");
-		DBCollection locations = db.getCollection("Location");
-		BasicDBObject document = new BasicDBObject();
-		document.append("name", thing.getName());
-		document.append("neighbors", thing.getNeighbors());
-		document.append("contains", thing.getContainment());
-		locations.insert(document);
+		MongoClient m = new MongoClient(DB_ADDRESS,PORT); //AWS
+		MongoDatabase db = m.getDatabase("Giotto");
+		System.out.println(db.getCollection("People").count());
+		m.close();
 		return true;
-
 	}
 	
 	/** 
@@ -40,8 +38,7 @@ public class DBManager {
 	 * @param the name of the database
 	 * */
 	public static long count(String name){
-		MongoClient m = new MongoClient("52.0.136.240",27017);
-//		MongoClient m = new MongoClient("0.0.0.0",27017);
+		MongoClient m = new MongoClient(DB_ADDRESS,PORT); //AWS
 		MongoDatabase db = m.getDatabase("Giotto");
 		long count = db.getCollection(name).count();
 		m.close();

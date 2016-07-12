@@ -2,21 +2,35 @@ package com.giotto.web;
 
 import java.net.UnknownHostException;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.giotto.db.DBManager;
-import com.giotto.things.Person;
+import com.giotto.things.Thing;
+import com.mongodb.util.JSON;
 
-@Path("home")
+@Path("/people")
 public class Resource {
 	
   @GET
-  @Path("hello")
+  @Path("count")
   @Produces(MediaType.TEXT_PLAIN)
-  public long helloWorld() throws UnknownHostException {
-	return DBManager.count("People");	  
+  public long count() throws UnknownHostException {
+		return DBManager.count("People");	  
   }
+  
+  @POST
+  @Path("/find")
+  @Consumes("application/json")
+  public String getPerson(Thing name) throws UnknownHostException {
+	    System.out.println(name);
+//		return DBManager.query("People", "matthew");	  
+	    return JSON.serialize(name);
+  }
+  
 }

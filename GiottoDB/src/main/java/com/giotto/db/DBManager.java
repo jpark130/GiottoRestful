@@ -2,13 +2,17 @@ package com.giotto.db;
 
 import java.net.UnknownHostException;
 
+import org.bson.Document;
+
 import com.giotto.things.*;
 import com.mongodb.*;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.util.JSON;
 public class DBManager {
 
-	private final static String DB_ADDRESS = "52.0.136.240";
-//	private final static String DB_ADDRESS = "0.0.0.0";
+//	private final static String DB_ADDRESS = "52.0.136.240";
+	private final static String DB_ADDRESS = "0.0.0.0";
 	private final static int PORT = 27017;
 	
 	//Overloaded method for inserting people
@@ -30,7 +34,7 @@ public class DBManager {
 		m.close();
 		return true;
 	}
-	
+
 	/** 
 	 * 
 	 * Counts the number of elements in the given database
@@ -43,6 +47,15 @@ public class DBManager {
 		long count = db.getCollection(name).count();
 		m.close();
 		return count;
+	}
+	
+
+	public static String query(String name, String person){
+		MongoClient m = new MongoClient(DB_ADDRESS,PORT); //AWS
+		MongoDatabase db = m.getDatabase("Giotto");
+		String output = JSON.serialize(db.getCollection(name).find(new Document("first",person)));
+		m.close();
+		return output;
 	}
 	
 	public static void update(String name, String newLocation) throws UnknownHostException{

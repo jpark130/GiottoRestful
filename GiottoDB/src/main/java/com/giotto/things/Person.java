@@ -13,5 +13,10 @@ public class Person implements Thing {
 	public Location getLocation(){
 		return null;
 	}
+	
+	@Override
+	public String toString(){
+		return "Name :" + name + ", location : " + location;
+	}
 
 }

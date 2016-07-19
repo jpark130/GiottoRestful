@@ -29,10 +29,8 @@ public class Resource {
   @Path("/find")
   @Consumes({"application/json"})
   public String getPerson(Person name) throws UnknownHostException {
-	  System.out.println(name.location);
-	  System.out.println(JSON.serialize(name));
-	//		return DBManager.query("People", "matthew");	  
-	  return JSON.serialize(name);
+	  System.out.println(name.toString());
+	  return DBManager.query("People", "matthew");	  
   }
   
 }

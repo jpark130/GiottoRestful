@@ -11,6 +11,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.giotto.db.DBManager;
+import com.giotto.things.Person;
 import com.giotto.things.Thing;
 import com.mongodb.util.JSON;
 
@@ -21,16 +22,17 @@ public class Resource {
   @Path("count")
   @Produces(MediaType.TEXT_PLAIN)
   public long count() throws UnknownHostException {
-		return DBManager.count("People");	  
+	  return DBManager.count("People");	  
   }
   
   @POST
   @Path("/find")
-  @Consumes("application/json")
-  public String getPerson(Thing name) throws UnknownHostException {
-	    System.out.println(name);
-//		return DBManager.query("People", "matthew");	  
-	    return JSON.serialize(name);
+  @Consumes({"application/json"})
+  public String getPerson(Person name) throws UnknownHostException {
+	  System.out.println(name.location);
+	  System.out.println(JSON.serialize(name));
+	//		return DBManager.query("People", "matthew");	  
+	  return JSON.serialize(name);
   }
   
 }

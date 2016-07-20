@@ -7,14 +7,18 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 
 public class Person implements Thing {
-	public String location;
+	public Location location;
 	public String name;
 	public HashMap<String, String> other;
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Person(String map) throws Exception {
 		  HashMap result = new ObjectMapper().readValue(map, HashMap.class);
-		  location = (String) result.get("location");
+		  
+		  String locationQuery = DBManager.query("Location", (String)result.get("location"));
+		  location = new Location(locationQuery);
+		  
+		  
 		  name = (String) result.get("name");
 		  if (location == null || name == null) throw new Exception("Not a proper input");;
 		  other = (HashMap<String, String>) result.get("other");

@@ -2,7 +2,7 @@ package com.giotto.things;
 
 
 import java.util.HashMap;
-
+import com.giotto.db.DBManager;
 import org.codehaus.jackson.map.ObjectMapper;
 
 

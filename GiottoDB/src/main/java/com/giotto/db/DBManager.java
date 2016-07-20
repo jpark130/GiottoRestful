@@ -6,7 +6,6 @@ import org.bson.Document;
 
 import com.giotto.things.*;
 import com.mongodb.*;
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.util.JSON;

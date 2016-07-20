@@ -34,8 +34,13 @@ public class DBManager {
 	//then add it to the database
 	public static boolean insert(Location thing) throws UnknownHostException{
 		MongoClient m = new MongoClient(DB_ADDRESS,PORT); //AWS
-		MongoDatabase db = m.getDatabase("Giotto");
-		System.out.println(db.getCollection("People").count());
+		MongoDatabase db = m.getDatabase("Giotto");		
+		MongoCollection<Document> people = db.getCollection("Location");
+		Document document = new Document();
+		document.append("name", thing.getName());
+		document.append("neighbors", thing.getNeighbors());
+		document.append("containment", thing.getContainment());
+		people.insertOne(document);
 		m.close();
 		return true;
 	}

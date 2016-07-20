@@ -26,7 +26,7 @@ public class LocationResource {
   @POST
   @Path("/find")
   @Consumes({"application/json"})
-  public String getPerson(String jsonString){
+  public String getLocation(String jsonString){
 	  try {
 		  Location l = new Location(jsonString);
 	      return l.toString();
@@ -34,5 +34,18 @@ public class LocationResource {
 		  System.out.println(e);
 	  }
 	  return "";
+  }
+  
+  @POST
+  @Path("/post")
+  @Consumes({"application/json"})
+  public boolean postLocation(String jsonString){
+	  try {
+		  Location l = new Location(jsonString);
+		  return DBManager.insert(l);
+	  } catch (Exception e) {
+	      System.out.println(e);
+	  }
+	  return false;
   }
 }

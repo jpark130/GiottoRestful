@@ -7,6 +7,7 @@ import org.bson.Document;
 import com.giotto.things.*;
 import com.mongodb.*;
 import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.util.JSON;
 public class DBManager {
@@ -18,8 +19,13 @@ public class DBManager {
 	//Overloaded method for inserting people
 	public static boolean insert(Person thing) throws UnknownHostException{
 		MongoClient m = new MongoClient(DB_ADDRESS,PORT); //AWS
-		MongoDatabase db = m.getDatabase("Giotto");
-		System.out.println(db.getCollection("People").count());
+		MongoDatabase db = m.getDatabase("Giotto");		
+		MongoCollection<Document> people = db.getCollection("People");
+		Document document = new Document();
+		document.append("name", thing.getName());
+		document.append("location", thing.getLocation());
+		document.append("other", thing.other);
+		people.insertOne(document);
 		m.close();
 		return true;
 	}

@@ -40,7 +40,7 @@ public class Resource {
   public boolean addPerson(String person){
 	  try {
 		  Person p = new Person(person);
-		  return DBManager.insert(p);
+		  return DBManager.insert("People", p);
 	  } catch (Exception e) {
 	      System.out.println(e);
 	  }

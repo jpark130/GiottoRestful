@@ -1,5 +1,7 @@
 package com.giotto.web;
 
+import java.util.logging.Level;
+
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -17,7 +19,7 @@ public class App {
 		
 		Server server = new Server(1111);
 		ServletContextHandler context = new ServletContextHandler(server, "/*");
-		
+		java.util.logging.Logger.getLogger("org.mongodb.driver").setLevel(Level.SEVERE);
 		context.addServlet(servlet, "/*");
 		
 		try {

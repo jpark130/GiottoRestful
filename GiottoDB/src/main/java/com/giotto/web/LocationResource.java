@@ -42,7 +42,7 @@ public class LocationResource {
   public boolean postLocation(String jsonString){
 	  try {
 		  Location l = new Location(jsonString);
-		  return DBManager.insert(l);
+		  return DBManager.insert("Location", l);
 	  } catch (Exception e) {
 	      System.out.println(e);
 	  }

@@ -1,6 +1,7 @@
 package com.giotto.db;
 
 import java.net.UnknownHostException;
+import java.util.logging.Level;
 
 import org.bson.Document;
 
@@ -8,6 +9,7 @@ import com.giotto.things.*;
 import com.mongodb.*;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.result.DeleteResult;
 import com.mongodb.util.JSON;
 public class DBManager {
 
@@ -15,35 +17,24 @@ public class DBManager {
 	private final static String DB_ADDRESS = "0.0.0.0";
 	private final static int PORT = 27017;
 	
-	//Overloaded method for inserting people
-	public static boolean insert(Person thing) throws UnknownHostException{
+	/** 
+	 * 
+	 * DB Method for insertion
+	 * 
+	 * @param new thing data
+	 * */	
+	public static boolean insert(String dbTitle, Thing thing) throws UnknownHostException{
+		java.util.logging.Logger.getLogger("org.mongodb.driver").setLevel(Level.SEVERE);
 		MongoClient m = new MongoClient(DB_ADDRESS,PORT); //AWS
 		MongoDatabase db = m.getDatabase("Giotto");		
-		MongoCollection<Document> people = db.getCollection("People");
-		Document document = new Document();
-		document.append("name", thing.getName());
-		document.append("location", thing.getLocation());
-		document.append("other", thing.other);
+		MongoCollection<Document> people = db.getCollection(dbTitle);
+		Document document = makeDoc(thing);
 		people.insertOne(document);
 		m.close();
+		System.out.println("Successfully inserted " + thing.getName() + "!");
 		return true;
 	}
 	
-	//Overloaded method for inserting location 
-	//to insert a location make json -> location 
-	//then add it to the database
-	public static boolean insert(Location thing) throws UnknownHostException{
-		MongoClient m = new MongoClient(DB_ADDRESS,PORT); //AWS
-		MongoDatabase db = m.getDatabase("Giotto");		
-		MongoCollection<Document> people = db.getCollection("Location");
-		Document document = new Document();
-		document.append("name", thing.getName());
-		document.append("neighbors", thing.getNeighbors());
-		document.append("containment", thing.getContainment());
-		people.insertOne(document);
-		m.close();
-		return true;
-	}
 
 	/** 
 	 * 
@@ -52,23 +43,40 @@ public class DBManager {
 	 * @param the name of the database
 	 * */
 	public static long count(String name){
-		MongoClient m = new MongoClient(DB_ADDRESS,PORT); //AWS
+		java.util.logging.Logger.getLogger("org.mongodb.driver").setLevel(Level.SEVERE);
+		MongoClient m = new MongoClient(DB_ADDRESS,PORT);
 		MongoDatabase db = m.getDatabase("Giotto");
 		long count = db.getCollection(name).count();
 		m.close();
 		return count;
 	}
 	
-
-	public static String query(String name, String person){
+	/** 
+	 * 
+	 * Overloaded method for querying location
+	 * 
+	 * @param new location data
+	 * @throws UnknownHostException 
+	 * */
+	public static String query(String name, Thing thing) throws UnknownHostException{
+		java.util.logging.Logger.getLogger("org.mongodb.driver").setLevel(Level.SEVERE);
 		MongoClient m = new MongoClient(DB_ADDRESS,PORT); //AWS
+		System.out.println("Querying for " + name + "...");
 		MongoDatabase db = m.getDatabase("Giotto");
-		String output = JSON.serialize(db.getCollection(name).find(new Document("first",person)));
+		Document queryDoc = makeDoc(thing);
+		Document result = db.getCollection(name).find(queryDoc).first();
+		if (result == null) {
+			m.close();
+			return null;
+		}
+		String output = JSON.serialize(result); 
 		m.close();
+		System.out.println("Found " + thing.getName() + "!");
 		return output;
 	}
 	
 	public static void update(String name, String newLocation) throws UnknownHostException{
+		java.util.logging.Logger.getLogger("org.mongodb.driver").setLevel(Level.SEVERE);
 		MongoClient client = new MongoClient();
 		DB db = client.getDB("Giotto");
 		DBCollection people = db.getCollection("People");
@@ -79,23 +87,34 @@ public class DBManager {
 		
 	}
 
-	public static WriteResult delete(Thing thing) throws UnknownHostException{
-		MongoClient client = new MongoClient();
-		DB db = client.getDB("Giotto");
-		if (thing.getClass().getName().equals("Person")){
-			DBCollection people = db.getCollection("People");
-			BasicDBObject document = new BasicDBObject();
-			document.append("name", thing.getName());
-			document.append("location", ((Person)thing).getLocation());
-			return people.remove(document);
+	public static DeleteResult delete(String dbTitle, Thing thing) throws UnknownHostException{
+		java.util.logging.Logger.getLogger("org.mongodb.driver").setLevel(Level.SEVERE);
+		
+		MongoClient m = new MongoClient(DB_ADDRESS,PORT); //AWS
+		System.out.println("Deleting " + thing.getName() + "...");
+		MongoDatabase db = m.getDatabase("Giotto");
+		Document queryDoc = makeDoc(thing);
+		
+		MongoCollection<Document> dbCollection = db.getCollection(dbTitle);
+		m.close();
+		return dbCollection.deleteMany(queryDoc);
+	}
+	
+	private static Document makeDoc(Thing thing){
+		Document queryDoc = new Document();
+		if (thing instanceof Location){
+			Location location = (Location) thing;
+			queryDoc.append("name", location.getName());
+			queryDoc.append("neighbors", location.getNeighbors());
+			queryDoc.append("containment", location.getContainment());
 		}
-		else {
-			BasicDBObject document = new BasicDBObject();
-			document.append("name", thing.getName());
-			document.append("neighbors", ((Location)thing).getNeighbors());
-			document.append("contains", ((Location)thing).getContainment());
-			return db.getCollection("Location").remove(document);
+		else if (thing instanceof Person){
+			Person person = (Person) thing;
+			queryDoc.append("name", person.getName());
+			queryDoc.append("location", person.getLocation().toString());
+			queryDoc.append("other", person.other);
 		}
+		return queryDoc;
 	}
 	
 }

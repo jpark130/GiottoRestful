@@ -14,11 +14,13 @@ public class Person implements Thing {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Person(String map) throws Exception {
 		  HashMap result = new ObjectMapper().readValue(map, HashMap.class);
-		  
-		  String locationQuery = DBManager.query("Location", (String)result.get("location"));
-		  location = new Location(locationQuery);
-		  
-		  
+		  Location l = new Location((HashMap<String, Object>)result.get("location"));
+		  String locationQuery = DBManager.query("Location", l);
+		  if (locationQuery == null) {
+			  location = l;
+			  DBManager.insert("Location", l);
+		  }
+		  else location = new Location(locationQuery);
 		  name = (String) result.get("name");
 		  if (location == null || name == null) throw new Exception("Not a proper input");;
 		  other = (HashMap<String, String>) result.get("other");
@@ -29,7 +31,7 @@ public class Person implements Thing {
 	}
 	
 	public Location getLocation(){
-		return null;
+		return location;
 	}
 	
 	@Override

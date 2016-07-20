@@ -1,34 +1,46 @@
 package com.giotto.things;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-
 import org.codehaus.jackson.map.ObjectMapper;
 
 public class Location implements Thing {
+	Object _id;
 	String name;
-	HashSet<Location> neighbors;
-	HashSet<Location> containment;
+	ArrayList<Location> neighbors;
+	ArrayList<Location> containment;
 	
 	public Location(String jsonString) throws Exception{
-		HashMap result = new ObjectMapper().readValue(jsonString, HashMap.class);
-		
-		name = (String) result.get("name");
-		neighbors = (HashSet<Location>) result.get("neighbors");
+		this(new ObjectMapper().readValue(jsonString, HashMap.class));
+	}
+
+	public Location(HashMap<String, Object> hashMap) throws Exception {
+		_id = hashMap.get("_id");
+		name = (String) hashMap.get("name");
+		neighbors = (ArrayList<Location>) hashMap.get("neighbors");
 		if (neighbors == null || name == null) throw new Exception("Not a proper input");;
-		containment = (HashSet<Location>) result.get("containment");
+		containment = (ArrayList<Location>) hashMap.get("containment");	
 	}
 
 	public String getName() {
 		return name;
 	}
 	
-	public HashSet<Location> getNeighbors(){
+	public ArrayList<Location> getNeighbors(){
 		return neighbors;
 	}
 
-	public HashSet<Location> getContainment() {
+	public ArrayList<Location> getContainment() {
 		return containment;
+	}
+	
+	@Override
+	public String toString(){
+		return "{_id : " + _id + ", name :" + name + ", neighbors :" + neighbors + ", containment : " + containment +  "}";
+	}
+
+	public Object getLocationID() {
+		return _id;
 	}
 
 }

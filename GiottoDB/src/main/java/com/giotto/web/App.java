@@ -1,7 +1,5 @@
 package com.giotto.web;
 
-import java.util.logging.Level;
-
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;

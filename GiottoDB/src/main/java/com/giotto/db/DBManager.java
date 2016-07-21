@@ -1,12 +1,14 @@
 package com.giotto.db;
 
 import java.net.UnknownHostException;
+import java.util.HashMap;
 import java.util.logging.Level;
 
 import org.bson.Document;
 
 import com.giotto.things.*;
 import com.mongodb.*;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.result.DeleteResult;
@@ -30,9 +32,7 @@ public class DBManager {
 		MongoDatabase db = m.getDatabase("Giotto");		
 		MongoCollection<Document> people = db.getCollection(dbTitle);
 		Document queryDoc = makeDoc(thing);
-		
 		if (db.getCollection(dbTitle).find(queryDoc).first() != null) return false;
-		
 		people.insertOne(queryDoc);
 		m.close();
 		System.out.println("Successfully inserted " + thing.getName() + "!");
@@ -55,9 +55,27 @@ public class DBManager {
 		return count;
 	}
 	
+	public static String[] search(String DBTitle, HashMap<String, Object> map){
+		java.util.logging.Logger.getLogger("org.mongodb.driver").setLevel(Level.SEVERE);
+		MongoClient m = new MongoClient(DB_ADDRESS,PORT);
+		MongoDatabase db = m.getDatabase("Giotto");
+		
+		Document queryDoc = new Document();
+		for (String key : map.keySet()) queryDoc.append(key, map.get(key));
+		FindIterable<Document> d = db.getCollection(DBTitle).find(queryDoc);
+		
+		int count = (int) db.getCollection(DBTitle).count(queryDoc);
+		String[] result = new String [count];
+		for (int i = 0; i < count ; i++){
+			result[i] = d.skip(i).iterator().next().toString();
+		}
+		m.close();
+		return result;
+	}
+	
 	/** 
 	 * 
-	 * DB method for querying location
+	 * DB method for querying thing based on exact data
 	 * 
 	 * @param new location data
 	 * @throws UnknownHostException 
@@ -111,24 +129,9 @@ public class DBManager {
 	
 	private static Document makeDoc(Thing thing){
 		Document queryDoc = new Document();
-		if (thing instanceof Location){
-			Location location = (Location) thing;
-			queryDoc.append("name", location.getName());
-			queryDoc.append("neighbors", location.getNeighbors());
-			queryDoc.append("containment", location.getContainment());
-		}
-		else if (thing instanceof Person){
-			Person person = (Person) thing;
-			queryDoc.append("name", person.getName());
-			queryDoc.append("location", person.getLocation().toString());
-			queryDoc.append("other", person.other);
-		}
-		else if (thing instanceof GeneralType){
-			GeneralType g = (GeneralType) thing;
-			queryDoc.append("name", g.getName());
-			queryDoc.append("type", g.getType());
-			queryDoc.append("location", g.getLocation());
-			queryDoc.append("other", g.getOther());
+		for (String key : thing.getRequiredKeys()){
+			if (key.equals("location"))	queryDoc.append(key, thing.getValue(key).toString());
+			else queryDoc.append(key, thing.getValue(key));
 		}
 		return queryDoc;
 	}

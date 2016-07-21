@@ -1,6 +1,7 @@
 package com.giotto.web;
 
 import java.net.UnknownHostException;
+import java.util.HashMap;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -10,8 +11,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.codehaus.jackson.map.ObjectMapper;
+
 import com.giotto.db.DBManager;
 import com.giotto.things.Person;
+import com.mongodb.util.JSON;
 @Path("/people")
 public class Resource {
 	
@@ -22,13 +26,14 @@ public class Resource {
 	  return DBManager.count("People");	  
   }
   
-  @POST
+  @SuppressWarnings("unchecked")
+@POST
   @Path("/find")
   @Consumes({"application/json"})
-  public String getPerson(String name){
+  public String getPerson(String jsonString){
 	  try {
-		  Person p = new Person(name);
-	      return DBManager.query("People", p);
+		  HashMap<String, Object> map = new ObjectMapper().readValue(jsonString, HashMap.class);
+	      return JSON.serialize(DBManager.search("People", map));
 	  } catch (Exception e) {
 		  System.out.println(e);
 	  }

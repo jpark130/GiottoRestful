@@ -3,32 +3,34 @@ package com.giotto.web;
 import java.net.UnknownHostException;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.DELETE;
+
 
 import com.giotto.db.DBManager;
-import com.giotto.things.Person;
-@Path("/people")
-public class Resource {
+import com.giotto.things.GeneralType;
+
+@Path("/thing")
+public class ThingResource {
 	
   @GET
-  @Path("count")
+  @Path("/count")
   @Produces(MediaType.TEXT_PLAIN)
   public long count() throws UnknownHostException {
-	  return DBManager.count("People");	  
+		return DBManager.count("Thing");	  
   }
   
   @POST
   @Path("/find")
   @Consumes({"application/json"})
-  public String getPerson(String name){
+  public String getThing(String jsonString){
 	  try {
-		  Person p = new Person(name);
-	      return DBManager.query("People", p);
+		  GeneralType thing = new GeneralType(jsonString);
+	      return DBManager.query("Thing", thing);
 	  } catch (Exception e) {
 		  System.out.println(e);
 	  }
@@ -38,10 +40,10 @@ public class Resource {
   @POST
   @Path("/post")
   @Consumes({"application/json"})
-  public boolean addPerson(String person){
+  public boolean postLocation(String jsonString){
 	  try {
-		  Person p = new Person(person);
-		  return DBManager.insert("People", p);
+		  GeneralType thing = new GeneralType(jsonString);
+		  return DBManager.insert("Thing", thing);
 	  } catch (Exception e) {
 	      System.out.println(e);
 	  }
@@ -53,8 +55,8 @@ public class Resource {
   @Consumes({"application/json"})
   public boolean removeLocation(String jsonString){
 	  try{
-		  Person l = new Person(jsonString);
-		  return DBManager.delete("People", l);
+		  GeneralType thing = new GeneralType(jsonString);
+		  return DBManager.delete("Thing", thing);
 	  } catch (Exception e){
 		  System.out.println(e);
 	  }

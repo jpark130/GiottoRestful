@@ -10,19 +10,21 @@ public class Person implements Thing {
 	public Location location;
 	public String name;
 	public HashMap<String, String> other;
+	public Object _id;
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Person(String map) throws Exception {
 		  HashMap result = new ObjectMapper().readValue(map, HashMap.class);
+		  _id = result.get("_id");
 		  Location l = new Location((HashMap<String, Object>)result.get("location"));
 		  String locationQuery = DBManager.query("Location", l);
 		  if (locationQuery == null) {
-			  location = l;
 			  DBManager.insert("Location", l);
+			  locationQuery = DBManager.query("Location", l);
 		  }
-		  else location = new Location(locationQuery);
+		  location = new Location(locationQuery);
 		  name = (String) result.get("name");
-		  if (location == null || name == null) throw new Exception("Not a proper input");;
+		  if (location == null || name == null) throw new Exception("Not a proper input");
 		  other = (HashMap<String, String>) result.get("other");
 	}
 	
@@ -36,7 +38,7 @@ public class Person implements Thing {
 	
 	@Override
 	public String toString(){
-		return location + name + other.toString();
+		return "{_id : " + _id + ", name :" + name + ", location :" + location + ", other : " + other +  "}";
 	}
 
 }

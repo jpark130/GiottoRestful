@@ -12,14 +12,12 @@ import org.glassfish.jersey.servlet.ServletContainer;
 public class App {
 	
     public static void main(String[] args) throws Exception {		
-    	//test
 		ResourceConfig config = new ResourceConfig();
 		config.packages("com.giotto");
 		ServletHolder servlet = new ServletHolder(new ServletContainer(config));
 		
 		Server server = new Server(1111);
 		ServletContextHandler context = new ServletContextHandler(server, "/*");
-		java.util.logging.Logger.getLogger("org.mongodb.driver").setLevel(Level.SEVERE);
 		context.addServlet(servlet, "/*");
 		
 		try {

@@ -8,10 +8,11 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.DELETE;
+
 
 import com.giotto.db.DBManager;
 import com.giotto.things.Location;
-import com.giotto.things.Person;
 
 @Path("/location")
 public class LocationResource {
@@ -29,7 +30,7 @@ public class LocationResource {
   public String getLocation(String jsonString){
 	  try {
 		  Location l = new Location(jsonString);
-	      return l.toString();
+	      return DBManager.query("Location", l);
 	  } catch (Exception e) {
 		  System.out.println(e);
 	  }
@@ -45,6 +46,19 @@ public class LocationResource {
 		  return DBManager.insert("Location", l);
 	  } catch (Exception e) {
 	      System.out.println(e);
+	  }
+	  return false;
+  }
+  
+  @DELETE
+  @Path("/delete")
+  @Consumes({"application/json"})
+  public boolean removeLocation(String jsonString){
+	  try{
+		  Location l = new Location(jsonString);
+		  return DBManager.delete("Location", l);
+	  } catch (Exception e){
+		  System.out.println(e);
 	  }
 	  return false;
   }

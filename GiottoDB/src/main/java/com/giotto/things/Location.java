@@ -10,10 +10,12 @@ public class Location implements Thing {
 	ArrayList<Location> neighbors;
 	ArrayList<Location> containment;
 	
+	@SuppressWarnings("unchecked")
 	public Location(String jsonString) throws Exception{
 		this(new ObjectMapper().readValue(jsonString, HashMap.class));
 	}
 
+	@SuppressWarnings({ "unchecked"})
 	public Location(HashMap<String, Object> hashMap) throws Exception {
 		_id = hashMap.get("_id");
 		name = (String) hashMap.get("name");

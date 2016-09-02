@@ -19,6 +19,10 @@ import com.giotto.db.DBManager;
 import com.giotto.things.GeneralType;
 import com.mongodb.util.JSON;
 
+
+/**
+ * APIs for querying things
+ * */
 @Path("/thing")
 public class ThingResource {
 	

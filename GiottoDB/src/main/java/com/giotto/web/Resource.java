@@ -16,6 +16,13 @@ import org.codehaus.jackson.map.ObjectMapper;
 import com.giotto.db.DBManager;
 import com.giotto.things.Person;
 import com.mongodb.util.JSON;
+
+
+
+/**
+ * 
+ * APIs for querying people
+ * */
 @Path("/people")
 public class Resource {
 	

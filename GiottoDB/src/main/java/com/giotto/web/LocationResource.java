@@ -19,6 +19,14 @@ import com.giotto.db.DBManager;
 import com.giotto.things.Location;
 import com.mongodb.util.JSON;
 
+
+
+
+/**
+ * 
+ * APIs for querying location
+ * */
+
 @Path("/location")
 public class LocationResource {
 	

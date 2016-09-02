@@ -9,6 +9,10 @@ import org.glassfish.jersey.servlet.ServletContainer;
 
 public class App {
 	
+	/**
+	 * 
+	 * Initializes the Restful API in a local host
+	 * */
     public static void main(String[] args) throws Exception {		
 		ResourceConfig config = new ResourceConfig();
 		config.packages("com.giotto");

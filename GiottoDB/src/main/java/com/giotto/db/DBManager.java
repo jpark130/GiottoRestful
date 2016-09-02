@@ -15,8 +15,8 @@ import com.mongodb.client.result.DeleteResult;
 import com.mongodb.util.JSON;
 public class DBManager {
 
-//	private final static String DB_ADDRESS = "52.0.136.240";
-	private final static String DB_ADDRESS = "0.0.0.0";
+	private final static String DB_ADDRESS = "52.0.136.240";
+//	private final static String DB_ADDRESS = "0.0.0.0";
 	private final static int PORT = 27017;
 	
 	/** 

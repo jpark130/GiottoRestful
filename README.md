@@ -19,15 +19,67 @@ Doing this, clients can start a restful server to query to the remote Mongodb.
 ###Example Code
 If you're trying to access data in a specific database, you must query to 
 http://localhost:1111/"name_of_the_database"
-Below are the example query code for each of the cases.
+Below are the example json data to pass on for each of the cases.
 
-####restful\_custom/restful\_custom.info
+####localhost:1111/Location/find
 ```ini
-name = RESTful custom
-description = Custom RESTful resource.
-core = 7.x
-dependencies[] = restful
+name = "NSH_3201"
+neighbors = ["NSH_3202"]
+containment = ["NSH_3"]
+```
 
-registry_autoload[] = PSR-4
+####localhost:1111/Location/post
+```ini
+name = "NSH_3201"
+neighbors = ["NSH_3202"]
+containment = ["NSH_3"]
+```
+
+
+####localhost:1111/Location/delete
+```ini
+name = "NSH_3201"
+neighbors = ["NSH_3202"]
+containment = ["NSH_3"]
+```
+
+
+####localhost:1111/People/find
+```ini
+name = Tyler 
+location = {name = "NSH_3201"
+            neighbors = ["NSH_3202"]
+            containment = ["NSH_3"]
+            }
+other = {"Major" = "Computer Science"
+         "Year" = "Senior"
+         }
+```
+
+
+####localhost:1111/People/post
+```ini
+name = Tyler 
+location = {name = "NSH_3201"
+            neighbors = ["NSH_3202"]
+            containment = ["NSH_3"]
+            }
+other = {"Major" = "Computer Science"
+         "Year" = "Senior"
+         }
+```
+
+
+
+####localhost:1111/People/delete
+```ini
+name = Tyler 
+location = {name = "NSH_3201"
+            neighbors = ["NSH_3202"]
+            containment = ["NSH_3"]
+            }
+other = {"Major" = "Computer Science"
+         "Year" = "Senior"
+         }
 ```
 

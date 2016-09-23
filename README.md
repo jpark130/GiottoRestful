@@ -1,5 +1,4 @@
 # GiottoRestful
-# GiottoActiveMapService
 
 This module allows clients to query/post/delete People/Location/GeneralType thing
 to Active Map Service for Giotto.
